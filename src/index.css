@@ -1,0 +1,35 @@
+
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background: #1e1e1e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  background-color: #282726;
+  width: 594px;
+  height: 726px;
+}
+
+header {
+  width: 352px;
+  height: 144px;
+}
+
+h2 {
+  text-align: center;
+  color: #F9F4DA;
+}
+
+p {
+  text-align: center;
+  color: #8E8E8E;
+}
+
