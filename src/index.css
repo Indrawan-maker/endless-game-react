@@ -29,6 +29,7 @@ header {
   justify-content: center;
   width: 352px;
   height: 144px;
+  padding: 40px;
 }
 
 h2 {
@@ -42,7 +43,7 @@ p {
 }
 
 .wrapper-lng {
-margin-top: 20px;
+margin: 30px auto;
 width: 253.5px;
 height: 51.5px;
 display: grid;
@@ -50,7 +51,7 @@ justify-content: center;
 align-items: center;
 justify-self: center;
 grid-template-columns: repeat(5, 1fr);
-grid-template-rows: repeat(5, 1fr);
+grid-template-rows: repeat(2, 1fr);
 gap: 2px;
 font-weight: 700;
 padding: 22px;
@@ -157,10 +158,11 @@ padding: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: -120px;
+  margin: 30px auto;
   gap: 2px;
 }
 input {
+  margin-top: 4px;
   width: 38px;
   height: 38px;
   background-color: #323232;
@@ -171,26 +173,27 @@ input {
 }
 
 .btn-wrapper {
+
   width: 480px;
   height: 136px;
-display: grid;
-grid-template-columns: repeat(10, 1fr);
-grid-template-rows: repeat(3, 1fr);
-grid-column-gap: 8px;
-grid-row-gap: 8px;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 2px;
+    margin: 60px auto;
 }
 
-.dip1, .dip2, .dip3, .dip4, .dip5, .dip6,
-.dip7, .dip8, .dip9, .dip10, .dip11, .dip12,
-.dip13, .dip14, .dip15, .dip16, .dip17, .dip18,
-.dip19, .dip20, .dip21, .dip22, .dip23, .dip24,
-.dip25, .dip26 {
-  background-color: #FCBA29;
+button {
+  margin: 0;
+  
+    background-color: #FCBA29;
   border: 1px solid #D7D7D7;
   font-weight: 600;
   cursor: pointer;
   border-radius: 4px;
+  padding: 6px 2px;
 }
+
 
 .dip1 { grid-area: 1 / 1 / 2 / 2; }
 .dip2 { grid-area: 1 / 2 / 2 / 3; }

@@ -42,7 +42,9 @@ const buttonElement = btnValue.map((val, i) => (
     <input type="text" />
     </div>
 
-{buttonElement}
+    <div className="btn-wrapper">
+      {buttonElement}
+    </div>
 
 
 
