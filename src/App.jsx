@@ -1,23 +1,59 @@
 import { useState } from "react"
 import  languages  from "./languages.js"
+import { clsx } from "clsx"
 
 
 
 
 export default function AssemblyEndgame() {
 
-        console.log(languages)
+
+        const [night, setNight] = useState(true)
         const [currentWord, setCurrentWord] = useState("react")
+        const [currentKeyboard, setCurrentKeyboard] = useState([])
 
         const letter = Array.from(currentWord)
-        const displayLetter = letter.map(word => <span>{word.toUpperCase()}</span>)
+        const displayLetter = letter.map(word => <span key={word}>{word.toUpperCase()}</span>)
+
+        const alphabet = "abcdefghijklmnopqrstuvwxyz"
 
         const lang = languages.map(langObj => 
-        <div style={{backgroundColor: langObj.backgroundColor, color: langObj.color}}>{langObj.name}</div>
+        <div style={{backgroundColor: langObj.backgroundColor, color: langObj.color}} key={langObj.name}>{langObj.name}</div>
         )
 
 
+        function handleKeyboard(letter) {
+            setCurrentKeyboard(prevkybord => 
+                prevkybord.includes(letter) ?
+                prevkybord :
+                [...prevkybord, letter])
+        }
+        
+        const btnElement = alphabet.split("").map(alpha => {
+            const isGuesses = currentWord.includes(alpha)
+            const isLetter = currentKeyboard.includes(alpha)
+            
+            const result = clsx({
+                "correct": isGuesses && !isLetter,
+                "wrong": isGuesses && isLetter
+            })
+
+            return (
+                <button key={alpha} className={result} onClick={() => handleKeyboard(letter)}>{alpha.toUpperCase()}</button>
+        )}
+        )
+
+        function handleNightMode(boolean) {
+            setNight(prevValue => !prevValue)
+        }
+
+
+
+
+
+
     return (
+        <>
         <main>
             <header>
                 <h1>Assembly: Endgame</h1>
@@ -34,6 +70,16 @@ export default function AssemblyEndgame() {
             <section className="word-wrapper">
                 {displayLetter}
             </section>
+            <section className="btn-wrapper">
+                {btnElement}
+            </section>
+            <section className="ng-wrapper">
+                <button className="btn-three">New Game</button>
+            </section>
         </main>
+            <section>
+                <button className="nightMode" onClick={handleNightMode}> turn Night Mode</button>
+            </section>
+        </>
     )
 }
