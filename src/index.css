@@ -57,7 +57,7 @@ section.game-status > h2 {
     margin: auto;
 }
 
-div {
+span {
     padding: 4px;
     border-radius: 4px;
 }
@@ -70,13 +70,15 @@ div {
     gap: 4px;
 }
 
-.word-wrapper > span {
-    gap: 4px;
+    .letter {
+    width: 45px;
+    height: 50px;
+    gap: 6px;
     font-size: 22px;
     font-weight: 700;
     background-color: #323232;
     padding: 16px 20px;
-    border-bottom: 1.80px solid #F9F4DA;
+    border-bottom: 1.40px solid #F9F4DA;
 
 }
 
@@ -162,4 +164,25 @@ button.correct {
 
 button.wrong {
     background-color: red;
+}
+
+
+span.chip {
+    border-radius: 3px;
+    padding: 4.5px;
+    position: relative;
+}
+
+span.chip.lost::before {
+    content: "💀";
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    font-size: 0.85rem;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.7);
 }
