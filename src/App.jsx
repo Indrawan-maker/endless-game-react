@@ -8,12 +8,10 @@ import { clsx } from "clsx"
 export default function AssemblyEndgame() {
 
 
-        const [night, setNight] = useState(true)
         const [currentWord, setCurrentWord] = useState("react")
         const [currentKeyboard, setCurrentKeyboard] = useState([])
 
-        const letter = Array.from(currentWord)
-        const displayLetter = letter.map(word => <span key={word}>{word.toUpperCase()}</span>)
+        const displayLetter = currentWord.split("").map((word, index) => <span key={index}>{currentKeyboard.includes(word) ? word.toUpperCase() : ""}</span>)
 
         const alphabet = "abcdefghijklmnopqrstuvwxyz"
 
@@ -30,22 +28,18 @@ export default function AssemblyEndgame() {
         }
         
         const btnElement = alphabet.split("").map(alpha => {
-            const isGuesses = currentWord.includes(alpha)
-            const isLetter = currentKeyboard.includes(alpha)
-            
+            const isGuesses = currentKeyboard.includes(alpha)
+            const isCorrect = isGuesses && currentWord.includes(alpha)
+            const isWrong = isGuesses && !currentWord.includes(alpha)
             const result = clsx({
-                "correct": isGuesses && !isLetter,
-                "wrong": isGuesses && isLetter
+                "correct": isCorrect,
+                "wrong": isWrong
             })
-
             return (
-                <button key={alpha} className={result} onClick={() => handleKeyboard(letter)}>{alpha.toUpperCase()}</button>
+                <button key={alpha} className={result} onClick={() => handleKeyboard(alpha)}>{alpha.toUpperCase()}</button>
         )}
         )
 
-        function handleNightMode(boolean) {
-            setNight(prevValue => !prevValue)
-        }
 
 
 
@@ -77,9 +71,9 @@ export default function AssemblyEndgame() {
                 <button className="btn-three">New Game</button>
             </section>
         </main>
-            <section>
+            {/* <section>
                 <button className="nightMode" onClick={handleNightMode}> turn Night Mode</button>
-            </section>
+            </section> */}
         </>
     )
 }

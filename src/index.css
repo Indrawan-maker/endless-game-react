@@ -163,14 +163,3 @@ button.correct {
 button.wrong {
     background-color: red;
 }
-
-button.nightMode {
-    background-color: #F9F4DA;
-    width: auto;
-    right: 200px;
-    display: none;
-}
-
-button.lightMode {
-    background-color: #262626;
-}
