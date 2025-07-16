@@ -1,4 +1,4 @@
-const languages = [
+export const languages = [
     {
         name: "HTML",
         backgroundColor: "#E2680F",
@@ -30,20 +30,19 @@ const languages = [
         color: "#F9F4DA",
     },
     {
-        name: "Python",
-        backgroundColor: "#FFD742",
-        color: "#1E1E1E",
-    },
-    {
-        name: "Ruby",
-        backgroundColor: "#D02B2B",
-        color: "#F9F4DA",
-    },
-    {
         name: "Assembly",
         backgroundColor: "#2D519F",
         color: "#F9F4DA",
     },
+    {
+        name: "Laravel",
+        backgroundColor: "#f53003",
+        color: "#fdfdfc",
+    },
+    {
+        name: "PHP",
+        backgroundColor: "#777bb3",
+        color: "#000000ff",
+    },
 ]
 
-export default languages

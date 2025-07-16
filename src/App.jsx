@@ -1,89 +1,189 @@
 import { useState } from "react"
-import  languages  from "./languages.js"
 import { clsx } from "clsx"
-
-
+import { languages } from "./languages"
+import { getFarewellText, getRandomWord } from "./utils"
+import Confetti from "react-confetti"
+import { words } from "./words"
 
 
 export default function AssemblyEndgame() {
+    // State values
+    const [currentWord, setCurrentWord] = useState(() => getRandomWord())
+    const [guessedLetters, setGuessedLetters] = useState([])
 
+    // Derived values
+    const numGuessesLeft = languages.length - 1
+    const wrongGuessCount =
+        guessedLetters.filter(letter => !currentWord.includes(letter)).length
+    const isGameWon =
+        currentWord.split("").every(letter => guessedLetters.includes(letter))
+    const isGameLost = wrongGuessCount >= numGuessesLeft
+    const isGameOver = isGameWon || isGameLost
+    const lastGuessedLetter = guessedLetters[guessedLetters.length - 1]
+    const isLastGuessIncorrect = lastGuessedLetter && !currentWord.includes(lastGuessedLetter)
 
-        const [currentWord, setCurrentWord] = useState("indrawan")
-        const [currentKeyboard, setCurrentKeyboard] = useState([])
+    // Static values
+    const alphabet = "abcdefghijklmnopqrstuvwxyz"
 
-        const wrongGuessCount = currentKeyboard.filter( word => 
-            !currentWord.includes(word)
-        ).length
-        console.log(wrongGuessCount)
-
-        const displayLetter = currentWord.split("").map((word, index) => 
-        <span key={index} className="letter">
-            {currentKeyboard.includes(word) ? word.toUpperCase() : ""}
-        </span>
+    function addGuessedLetter(letter) {
+        setGuessedLetters(prevLetters =>
+            prevLetters.includes(letter) ?
+                prevLetters :
+                [...prevLetters, letter]
         )
+    }
 
-        const alphabet = "abcdefghijklmnopqrstuvwxyz"
+    function startNewGame() {
+        setCurrentWord(getRandomWord())
+        setGuessedLetters([])
+    }
 
-        const lang = languages.map((langObj, i ) => {
-            const isLost = i < wrongGuessCount
-            const className = clsx("chip", isLost && "lost")
-        return (
-            <span style={{backgroundColor: langObj.backgroundColor, color: langObj.color}} 
-            className={className} key={langObj.name}>{langObj.name}
-            </span>
-        )}
-        )
-
-
-        function handleKeyboard(letter) {
-            setCurrentKeyboard(prevkybord => 
-                prevkybord.includes(letter) ?
-                prevkybord :
-                [...prevkybord, letter])
+    const languageElements = languages.map((lang, index) => {
+        const isLanguageLost = index < wrongGuessCount
+        const styles = {
+            backgroundColor: lang.backgroundColor,
+            color: lang.color
         }
-        
-        const btnElement = alphabet.split("").map(alpha => {
-            const isGuesess = currentKeyboard.includes(alpha)
-            const isCorrect = isGuesess && currentWord.includes(alpha)
-            const isWrong = isGuesess && !currentWord.includes(alpha)
-            const className = clsx({
-                correct: isCorrect,
-                wrong: isWrong
-            })
-            return (
-                <button key={alpha} className={className} onClick={() => handleKeyboard(alpha)}>{alpha.toUpperCase()}</button>
-        )}
+        const className = clsx("chip", isLanguageLost && "lost")
+        return (
+            <span
+                className={className}
+                style={styles}
+                key={lang.name}
+            >
+                {lang.name}
+            </span>
         )
+    })
 
+    const letterElements = currentWord.split("").map((letter, index) => {
+        const shouldRevealLetter = isGameLost || guessedLetters.includes(letter)
+        const letterClassName = clsx(
+            isGameLost && !guessedLetters.includes(letter) && "missed-letter"
+        )
+        return (
+            <span key={index} className={letterClassName}>
+                {shouldRevealLetter ? letter.toUpperCase() : ""}
+            </span>
+        )
+    })
+
+    const keyboardElements = alphabet.split("").map(letter => {
+        const isGuessed = guessedLetters.includes(letter)
+        const isCorrect = isGuessed && currentWord.includes(letter)
+        const isWrong = isGuessed && !currentWord.includes(letter)
+        const className = clsx({
+            correct: isCorrect,
+            wrong: isWrong
+        })
+
+        return (
+            <button
+                className={className}
+                key={letter}
+                disabled={isGameOver}
+                aria-disabled={guessedLetters.includes(letter)}
+                aria-label={`Letter ${letter}`}
+                onClick={() => addGuessedLetter(letter)}
+            >
+                {letter.toUpperCase()}
+            </button>
+        )
+    })
+
+    const gameStatusClass = clsx("game-status", {
+        won: isGameWon,
+        lost: isGameLost,
+        farewell: !isGameOver && isLastGuessIncorrect
+    })
+
+    function renderGameStatus() {
+        if (!isGameOver && isLastGuessIncorrect) {
+            return (
+                <p className="farewell-message">
+                    {getFarewellText(languages[wrongGuessCount - 1].name)}
+                </p>
+            )
+        }
+
+        if (isGameWon) {
+            return (
+                <>
+                    <h2>You win!</h2>
+                    <p>Jago juga! 🎉</p>
+                </>
+            )
+        }
+        if (isGameLost) {
+            return (
+                <>
+                    <h2>Game over!</h2>
+                    <p className="lose">Lanjut scroll fesnuknya bang, gini doang ga bisa🤣🤣🤣🤣</p>
+                </>
+            )
+        }
+
+        return null
+    }
 
     return (
-        <>
         <main>
+            {
+                isGameWon && 
+                    <Confetti
+                        recycle={false}
+                        numberOfPieces={1000}
+                    />
+            }
             <header>
-                <h1>Assembly: Endgame</h1>
-                <p>Guess the word within 8 attempts to keep the
-                programming world safe from Assembly!</p>
+                <h1>Tebak Nama: kawan kau</h1>
+                <p>Tebak nama kawan kau, dengan batas salah kurang dari 8 huruf</p>
             </header>
-            <section className="game-status">
-                <h2>You win!</h2>
-                <p>Well done! 🎉</p>
+
+            <section
+                aria-live="polite"
+                role="status"
+                className={gameStatusClass}
+            >
+                {renderGameStatus()}
             </section>
-            <section className="lang-wrapper">
-            {lang}
+
+            <section className="language-chips">
+                {languageElements}
             </section>
-            <section className="word-wrapper">
-                {displayLetter}
+
+            <section className="word">
+                {letterElements}
             </section>
-            <section className="btn-wrapper">
-                {btnElement}
+
+            {/* Combined visually-hidden aria-live region for status updates */}
+            <section
+                className="sr-only"
+                aria-live="polite"
+                role="status"
+            >
+                <p>
+                    {currentWord.includes(lastGuessedLetter) ?
+                        `Yah bener ${lastGuessedLetter} ya itu kata katanya.` :
+                        `Sorry bang, ${lastGuessedLetter} salah.`
+                    }
+                    You have {numGuessesLeft} attempts left.
+                </p>
+                <p>Current word: {currentWord.split("").map(letter =>
+                    guessedLetters.includes(letter) ? letter + "." : "blank.")
+                    .join(" ")}</p>
+
             </section>
-            <section className="ng-wrapper">
-                <button className="btn-three">New Game</button>
+
+            <section className="keyboard">
+                {keyboardElements}
             </section>
+
+            {isGameOver &&
+                <button
+                    className="new-game"
+                    onClick={startNewGame}
+                >Main Lagi</button>}
         </main>
-            {/* <section>
-                <button className="nightMode" onClick={handleNightMode}> turn Night Mode</button>
-            </section> */}
-        </>
     )
 }
