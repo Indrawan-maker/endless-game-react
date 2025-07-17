@@ -1,11 +1,16 @@
-import { useState} from "react"
+import React from 'react';
+import { useState } from "react"
 import { clsx } from "clsx"
 import { languages } from "./languages"
 import { getFarewellText, getRandomWord } from "./utils"
 import Confetti from "react-confetti"
+import { useWindowSize } from 'react-use'
+
 
 
 export default function AssemblyEndgame() {
+
+    const { width, height } = useWindowSize();
     // State values
     const [currentWord, setCurrentWord] = useState(() => getRandomWord())
     const [guessedLetters, setGuessedLetters] = useState([])
@@ -129,12 +134,19 @@ export default function AssemblyEndgame() {
 
     return (
         <>
+
+
             {
+
                 isGameWon &&
                 <Confetti
+                    width={width}
+                    height={height}
+                    numberOfPieces={500}
+                    gravity={0.3}
                     recycle={false}
-                    numberOfPieces={1000}
                 />
+
             }
             <main>
                 <header>
