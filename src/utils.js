@@ -15,8 +15,7 @@ export function getFarewellText(language) {
         `Denis sekarang bayangin kamu ngoding ${language} terus dapat lambo`,
         `Ngoding ${language}, meding scroll fesnuk`,
         `${language}? mending doomscrooling dulu`,
-        `Ngoding ${language} = dapat lambo`,
-
+        `Ngoding ${language} = dapat lambo`
     ];
 
     const randomIndex = Math.floor(Math.random() * options.length);

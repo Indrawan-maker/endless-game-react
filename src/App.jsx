@@ -3,7 +3,6 @@ import { clsx } from "clsx"
 import { languages } from "./languages"
 import { getFarewellText, getRandomWord } from "./utils"
 import Confetti from "react-confetti"
-import { words } from "./words"
 
 
 export default function AssemblyEndgame() {
