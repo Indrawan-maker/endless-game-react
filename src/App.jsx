@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState} from "react"
 import { clsx } from "clsx"
 import { languages } from "./languages"
 import { getFarewellText, getRandomWord } from "./utils"
@@ -24,6 +24,7 @@ export default function AssemblyEndgame() {
 
     // Static values
     const alphabet = "abcdefghijklmnopqrstuvwxyz"
+
 
     function addGuessedLetter(letter) {
         setGuessedLetters(prevLetters =>
@@ -117,8 +118,8 @@ export default function AssemblyEndgame() {
         if (isGameLost) {
             return (
                 <>
-                    <h2>Game over!</h2>
-                    <p className="lose">Lanjut scroll fesnuknya bang, gini doang ga bisa🤣🤣🤣🤣</p>
+                    <h2 className="h2-lose">Game over!</h2>
+                    <p className="lose">Mending ngoding PHP 🤣🤣🤣</p>
                 </>
             )
         }
@@ -127,63 +128,65 @@ export default function AssemblyEndgame() {
     }
 
     return (
-        <main>
+        <>
             {
-                isGameWon && 
-                    <Confetti
-                        recycle={false}
-                        numberOfPieces={1000}
-                    />
+                isGameWon &&
+                <Confetti
+                    recycle={false}
+                    numberOfPieces={1000}
+                />
             }
-            <header>
-                <h1>Tebak Nama: kawan</h1>
-                <p>Tebak nama kawan kamu, dengan batas salah kurang dari 8 huruf</p>
-            </header>
+            <main>
+                <header>
+                    <h1>Tebak Nama: kawan</h1>
+                    <p>Tebak nama kawan kamu, dengan batas salah kurang dari 8 huruf</p>
+                </header>
 
-            <section
-                aria-live="polite"
-                role="status"
-                className={gameStatusClass}
-            >
-                {renderGameStatus()}
-            </section>
+                <section
+                    aria-live="polite"
+                    role="status"
+                    className={gameStatusClass}
+                >
+                    {renderGameStatus()}
+                </section>
 
-            <section className="language-chips">
-                {languageElements}
-            </section>
+                <section className="language-chips">
+                    {languageElements}
+                </section>
 
-            <section className="word">
-                {letterElements}
-            </section>
+                <section className="word">
+                    {letterElements}
+                </section>
 
-            {/* Combined visually-hidden aria-live region for status updates */}
-            <section
-                className="sr-only"
-                aria-live="polite"
-                role="status"
-            >
-                <p>
-                    {currentWord.includes(lastGuessedLetter) ?
-                        `Yah bener ${lastGuessedLetter} ya itu kata katanya.` :
-                        `Sorry bang, ${lastGuessedLetter} salah.`
-                    }
-                    You have {numGuessesLeft} attempts left.
-                </p>
-                <p>Current word: {currentWord.split("").map(letter =>
-                    guessedLetters.includes(letter) ? letter + "." : "blank.")
-                    .join(" ")}</p>
+                {/* Combined visually-hidden aria-live region for status updates */}
+                <section
+                    className="sr-only"
+                    aria-live="polite"
+                    role="status"
+                >
+                    <p>
+                        {currentWord.includes(lastGuessedLetter) ?
+                            `Yah bener ${lastGuessedLetter} ya itu kata katanya.` :
+                            `Sorry bang, ${lastGuessedLetter} salah.`
+                        }
+                        You have {numGuessesLeft} attempts left.
+                    </p>
+                    <p>Current word: {currentWord.split("").map(letter =>
+                        guessedLetters.includes(letter) ? letter + "." : "blank.")
+                        .join(" ")}</p>
 
-            </section>
+                </section>
 
-            <section className="keyboard">
-                {keyboardElements}
-            </section>
+                <section className="keyboard">
+                    {keyboardElements}
+                </section>
 
-            {isGameOver &&
-                <button
-                    className="new-game"
-                    onClick={startNewGame}
-                >Main Lagi</button>}
-        </main>
+                {isGameOver &&
+                    <button
+                        className="new-game"
+                        onClick={startNewGame}
+                    >Main Lagi</button>}
+            </main>
+        </>
     )
 }
