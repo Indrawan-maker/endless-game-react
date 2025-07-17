@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import { clsx } from "clsx"
 import { languages } from "./languages"
 import { getFarewellText, getRandomWord } from "./utils"
@@ -10,22 +10,56 @@ import { useWindowSize } from 'react-use'
 
 export default function AssemblyEndgame() {
 
+
     const { width, height } = useWindowSize();
     // State values
     const [currentWord, setCurrentWord] = useState(() => getRandomWord())
     const [guessedLetters, setGuessedLetters] = useState([])
-    console.log(currentWord)
+    const [timer, setTimer] = useState(30)
+    const [isTimeUp, setIsTimeUp] = useState(false)
 
+    const farewellRef = useRef(null)
+
+
+
+    
     // Derived values
     const numGuessesLeft = languages.length - 1
     const wrongGuessCount =
         guessedLetters.filter(letter => !currentWord.includes(letter)).length
     const isGameWon =
         currentWord.split("").every(letter => guessedLetters.includes(letter))
-    const isGameLost = wrongGuessCount >= numGuessesLeft
+    const isGameLost = wrongGuessCount >= numGuessesLeft || isTimeUp
     const isGameOver = isGameWon || isGameLost
     const lastGuessedLetter = guessedLetters[guessedLetters.length - 1]
     const isLastGuessIncorrect = lastGuessedLetter && !currentWord.includes(lastGuessedLetter)
+    
+    // useEffect
+    useEffect(() => {
+        if (isGameOver) {
+            return;
+        }
+        if (timer === 0) {
+            setIsTimeUp(true)
+            return
+        }
+        const timerId = setTimeout(() => {
+            setTimer(timer - 1)
+        }, 1000);
+
+        return () => clearTimeout(timerId)
+    }, [timer, isGameOver])
+
+    useEffect(() => {
+        if (isGameOver) {
+            farewellRef.current = null
+        } else if (isLastGuessIncorrect && lastGuessedLetter) {
+            farewellRef.current = getFarewellText(languages[wrongGuessCount - 1].name)
+        } else {
+            farewellRef.current = null
+        }
+    }, [guessedLetters, isGameOver])
+
 
     // Static values
     const alphabet = "abcdefghijklmnopqrstuvwxyz"
@@ -40,6 +74,8 @@ export default function AssemblyEndgame() {
     }
 
     function startNewGame() {
+        setTimer(30)
+        setIsTimeUp(false)
         setCurrentWord(getRandomWord())
         setGuessedLetters([])
     }
@@ -104,10 +140,10 @@ export default function AssemblyEndgame() {
     })
 
     function renderGameStatus() {
-        if (!isGameOver && isLastGuessIncorrect) {
+        if (!isGameOver && farewellRef.current) {
             return (
                 <p className="farewell-message">
-                    {getFarewellText(languages[wrongGuessCount - 1].name)}
+                    {farewellRef.current}
                 </p>
             )
         }
@@ -152,6 +188,7 @@ export default function AssemblyEndgame() {
                 <header>
                     <h1>Tebak Nama: kawan</h1>
                     <p>Tebak nama kawan kamu, dengan batas salah kurang dari 8 huruf</p>
+                    <p style={{ color: timer < 10 ? "red" : 'white' }}>Time left: {timer}s</p>
                 </header>
 
                 <section
