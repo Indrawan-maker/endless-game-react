@@ -10,6 +10,7 @@ export default function AssemblyEndgame() {
     // State values
     const [currentWord, setCurrentWord] = useState(() => getRandomWord())
     const [guessedLetters, setGuessedLetters] = useState([])
+    console.log(currentWord)
 
     // Derived values
     const numGuessesLeft = languages.length - 1
@@ -136,8 +137,8 @@ export default function AssemblyEndgame() {
                     />
             }
             <header>
-                <h1>Tebak Nama: kawan kau</h1>
-                <p>Tebak nama kawan kau, dengan batas salah kurang dari 8 huruf</p>
+                <h1>Tebak Nama: kawan</h1>
+                <p>Tebak nama kawan kamu, dengan batas salah kurang dari 8 huruf</p>
             </header>
 
             <section
